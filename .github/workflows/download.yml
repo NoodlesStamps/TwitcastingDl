@@ -1,0 +1,43 @@
+name: Download Twitcasting Video
+
+on:
+  workflow_dispatch:
+
+env:
+  DISPLAY: ":99"
+  DEBIAN_FRONTEND: noninteractive
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+      - name: Install Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y unzip wget software-properties-common apt-transport-https ffmpeg mkvtoolnix xvfb
+          wget -q https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_100.0.1185.29-1_amd64.deb
+          sudo dpkg -i microsoft-edge-stable_100.0.1185.29-1_amd64.deb || true
+          sudo apt install -f
+          wget https://msedgedriver.azureedge.net/100.0.1185.29/edgedriver_linux64.zip
+          unzip edgedriver_linux64.zip
+          sudo mv msedgedriver /usr/bin/msedgedriver
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          npm -g i minyami
+      - name: Start Background Service
+        run: |
+          nohup /usr/bin/Xvfb :99 -ac -screen 0 1280x960x24 > /var/log/Xvfb.log &
+          nohup msedgedriver > /var/log/msedgedriver.log &
+
+      - name: Run Python Scripts
+        run: |
+          python download.py
