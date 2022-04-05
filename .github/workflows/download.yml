@@ -43,7 +43,7 @@ jobs:
           nohup /usr/bin/msedgedriver > msedgedriver.log &
       - name: Run Download Program
         env:
-          TWITCASTING_URL: github.event.inputs.url
+          TWITCASTING_URL: ${{github.event.inputs.url}}
         run: |
           python download.py
       - name: Upload Downloaded Videos
