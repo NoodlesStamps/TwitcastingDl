@@ -8,6 +8,7 @@ import json
 import subprocess
 import os
 import requests
+import re
 
 
 logging.basicConfig(level=logging.INFO,
@@ -15,6 +16,19 @@ logging.basicConfig(level=logging.INFO,
                     datefmt='%Y-%m-%d %H:%M:%S'
                     )
 
+twitcasting_url = os.getenv("TWITCASTING_URL")
+
+if twitcasting_url is None:
+    logging.error("no twitcasting url")
+    sys.exit()
+
+match = re.search(r'https://twitcasting\.tv/(.*)/movie/(.*)', twitcasting_url)
+if not match:
+    logging.info("not twitcasting video url")
+    sys.exit()
+
+user_id = match.group(1)
+video_id = match.group(2)
 
 logging.info("start webdriver")
 driver = webdriver.Remote("127.0.0.1:9515")
@@ -80,7 +94,7 @@ for url in urls:
         continue
     url_data = urlparse(url)
     media_url = url_data.scheme+"://"+url_data.netloc+content.split()[-1]
-    output = "v%s" % c
+    output = "%s_%s_%s" % (user_id, video_id, c)
     logging.info("start download video stream")
     download_command = 'minyami -d "%s" --output "%s.ts" --headers "Referer: https://twitcasting.tv/" --headers "User-Agent: %s" --threads 3' % (
         media_url, output, ua)
