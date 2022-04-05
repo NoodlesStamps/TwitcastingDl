@@ -12,9 +12,9 @@ logging.basicConfig(level=logging.INFO,
 
 logging.info("start webdriver")
 options = webdriver.EdgeOptions()
-options.add_argument("--proxy-server=http://192.168.2.2:7890")
+#options.add_argument("--proxy-server=http://192.168.2.2:7890")
 driver = webdriver.Remote("127.0.0.1:9515", options=options)
-driver = webdriver.Chrome()
+#driver = webdriver.Chrome()
 
 logging.info("open twitcasting page")
 driver.get('https://twitcasting.tv/cordelia_yurica/movie/717476623')
