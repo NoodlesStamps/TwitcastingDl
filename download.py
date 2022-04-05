@@ -20,12 +20,12 @@ twitcasting_url = os.getenv("TWITCASTING_URL")
 
 if twitcasting_url is None:
     logging.error("no twitcasting url")
-    sys.exit()
+    sys.exit(-1)
 
 match = re.search(r'https://twitcasting\.tv/(.*)/movie/(.*)', twitcasting_url)
 if not match:
     logging.info("not twitcasting video url")
-    sys.exit()
+    sys.exit(-1)
 
 user_id = match.group(1)
 video_id = match.group(2)
@@ -34,7 +34,7 @@ logging.info("start webdriver")
 driver = webdriver.Remote("127.0.0.1:9515")
 
 logging.info("open twitcasting page")
-driver.get('https://twitcasting.tv/cordelia_yurica/movie/717476623')
+driver.get(twitcasting_url)
 time.sleep(1)
 driver.refresh()
 time.sleep(1)
@@ -74,7 +74,7 @@ driver.close()
 
 if len(url) == 0:
     logging.error("no media found")
-    sys.exit()
+    sys.exit(-1)
 
 c = 1
 for url in urls:
