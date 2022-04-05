@@ -22,6 +22,8 @@ if twitcasting_url is None:
     logging.error("no twitcasting url")
     sys.exit(-1)
 
+logging.info("set url to %s"%twitcasting_url)
+
 match = re.search(r'https://twitcasting\.tv/(.*)/movie/(.*)', twitcasting_url)
 if not match:
     logging.info("not twitcasting video url")
