@@ -37,7 +37,12 @@ jobs:
         run: |
           nohup /usr/bin/Xvfb :99 -ac -screen 0 1280x960x24 > Xvfb.log &
           nohup /usr/bin/msedgedriver > msedgedriver.log &
-
-      - name: Run Python Scripts
+      - name: Run Download Program
         run: |
           python download.py
+      - name: Upload Downloaded Videos
+        uses: actions/upload-artifact@v3
+        with:
+          name: videos
+          path: output
+

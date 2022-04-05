@@ -81,12 +81,16 @@ for url in urls:
     url_data = urlparse(url)
     media_url = url_data.scheme+"://"+url_data.netloc+content.split()[-1]
     output = "v%s" % c
+    logging.info("start download video stream")
     download_command = 'minyami -d "%s" --output "%s.ts" --headers "Referer: https://twitcasting.tv/" --headers "User-Agent: %s" --threads 3' % (
         media_url, output, ua)
     os.system(download_command)
+    logging.info("start fix video stream")
     fix_command = 'mkvmerge --output %s.mkv --language 0:und --fix-bitstream-timing-information 0:1 --language 1:und %s.ts --track-order 0:0,0:1' % (
         output, output)
     os.system(fix_command)
-    format_command = 'ffmpeg -i %s.mkv -c:v copy -c:a copy %s.mkv' % (
+    logging.info("format video to mp4")
+    format_command = 'ffmpeg -i %s.mkv -c:v copy -c:a copy output/%s.mp4' % (
         output, output)
     os.system(format_command)
+    logging.info("finished")
