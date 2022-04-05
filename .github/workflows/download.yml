@@ -6,14 +6,17 @@ on:
       url:
         required: true
         description: Twitcasting Video Url
-      upload:
-        type: choice
+      artifact:
+        type: boolean
         required: true
-        description: Upload Video To
-        options:
-          - artifact
-          - onedrive
-          - none
+        description: If Upload To Artifact
+        default: true
+      onedrive:
+        type: boolean
+        required: true
+        description: If Upload To Onedrive
+        default: false
+
 
 env:
   DISPLAY: ":99"
