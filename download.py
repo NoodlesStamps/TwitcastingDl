@@ -70,9 +70,6 @@ for url in urls:
         'Origin': 'https://twitcasting.tv',
         'Referer': 'https://twitcasting.tv/',
         'User-Agent': ua
-    }, proxies={
-        'http': 'http://192.168.2.2:7890',
-        'https': 'http://192.168.2.2:7890'
     })
     if response.status_code != 200:
         logging.error("get real video fail %s" % response.status_code)
