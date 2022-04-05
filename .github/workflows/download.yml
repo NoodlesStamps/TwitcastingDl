@@ -59,7 +59,7 @@ jobs:
         run: |
           python download.py
       - name: Upload Downloaded Videos
-        if: ${{github.event.inputs.artifact}}
+        if: ${{github.event.inputs.artifact == true}}
         uses: actions/upload-artifact@v3
         with:
           name: videos
