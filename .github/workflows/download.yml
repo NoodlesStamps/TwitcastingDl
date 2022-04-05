@@ -9,12 +9,12 @@ on:
       artifact:
         type: boolean
         required: true
-        description: If Upload To Artifact
-        default: true
+        description: Upload Video To Artifact
+        default: false
       onedrive:
         type: boolean
         required: true
-        description: If Upload To Onedrive
+        description: Upload Video To Onedrive
         default: false
 
 
@@ -55,9 +55,11 @@ jobs:
       - name: Run Download Program
         env:
           TWITCASTING_URL: ${{github.event.inputs.url}}
+          UPLOAD_VIDEO_TO_ONEDRIVE: ${{github.event.inputs.onedrive}}
         run: |
           python download.py
       - name: Upload Downloaded Videos
+        if: ${{github.event.inputs.artifact}}
         uses: actions/upload-artifact@v3
         with:
           name: videos
