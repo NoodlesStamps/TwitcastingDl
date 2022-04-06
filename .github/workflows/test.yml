@@ -10,11 +10,11 @@ on:
         default: false
 
 jobs:
-  download:
+  test:
     runs-on: ubuntu-latest
 
     steps:
       - name: "Test Step"
-        if: ${{github.event.inputs.artifact}} == true
+        if: ${{github.event.inputs.input_boolen}} == true
         run: |
           echo "TEST OK"
