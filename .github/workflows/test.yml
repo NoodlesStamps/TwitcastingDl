@@ -14,6 +14,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: "echo env"
+        run: |
+          echo ${{github.event.inputs.input_boolen}}
       - name: "Test Step"
         if: ${{github.event.inputs.input_boolen}} == true
         run: |
