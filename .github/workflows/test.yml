@@ -1,0 +1,20 @@
+name: Github Actions Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      input_boolen:
+        type: boolean
+        required: true
+        description: Test Input
+        default: false
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Test Step"
+        if: ${{github.event.inputs.artifact}} == true
+        run: |
+          echo "TEST OK"

@@ -38,7 +38,7 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt update
-          sudo apt install -y unzip wget software-properties-common apt-transport-https ffmpeg mkvtoolnix xvfb
+          sudo apt install -y unzip wget ffmpeg mkvtoolnix xvfb
           wget -q https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_100.0.1185.29-1_amd64.deb
           sudo dpkg -i microsoft-edge-stable_100.0.1185.29-1_amd64.deb || true
           sudo apt install -f
@@ -59,7 +59,7 @@ jobs:
         run: |
           python download.py
       - name: Upload Downloaded Videos
-        if: ${{github.event.inputs.artifact == true}}
+        if: ${{github.event.inputs.artifact}} == true
         uses: actions/upload-artifact@v3
         with:
           name: videos
