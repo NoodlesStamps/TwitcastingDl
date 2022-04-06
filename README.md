@@ -9,7 +9,7 @@ Download twitcasting live record with Github Actions.
 - ffmpeg
 
 ## Usage
-Open [Download Twitcasting Video](./actions/workflows/download.yml) Github Actions Page.  
+Open [Download Twitcasting Video](/actions/workflows/download.yml) Github Actions Page.  
 Paste twitcasting video url.  
 Select if upload video to github artifact or others.  
 Click Run workflow botton.  
