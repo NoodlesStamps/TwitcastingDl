@@ -18,6 +18,6 @@ jobs:
         run: |
           echo ${{github.event.inputs.input_boolen}}
       - name: "Test Step"
-        if: ${{github.event.inputs.input_boolen}}
+        if: ${{github.event.inputs.input_boolen == 'true'}}
         run: |
           echo "TEST OK"
