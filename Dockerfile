@@ -2,7 +2,7 @@ FROM debian:11
 
 WORKDIR /root
 
-ADD app /root/
+ADD app /root/app/
 ADD docker-entrypoint.sh /bin/docker-entrypoint.sh
 
 ENV DISPLAY :99
