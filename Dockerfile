@@ -26,6 +26,6 @@ RUN mkdir /root/build &&\
     apt autoremove -y &&\
     apt autoclean &&\
     rm -rf /var/lib/apt/lists/* &&\
-    rm -rf /root/app
+    rm -rf /root/build
 
 ENTRYPOINT [ "docker-entrypoint.sh" ]
