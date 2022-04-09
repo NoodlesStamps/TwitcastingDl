@@ -1,0 +1,18 @@
+name: Run Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        required: true
+        description: Twitcasting Video Url
+        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run Docker Test
+        run: |
+          docker run -e TWITCASTING_URL=${{github.event.inputs.url}} ${{ secrets.SECRET_TOKEN }}:latest
+

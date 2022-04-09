@@ -22,7 +22,7 @@ if twitcasting_url is None:
     logging.error("no twitcasting url")
     sys.exit(-1)
 
-logging.info("set url to %s"%twitcasting_url)
+logging.info("set url to %s" % twitcasting_url)
 
 match = re.search(r'https://twitcasting\.tv/(.*)/movie/(.*)', twitcasting_url)
 if not match:
@@ -35,7 +35,7 @@ video_id = match.group(2)
 logging.info("start webdriver")
 options = webdriver.EdgeOptions()
 options.add_argument("--no-sandbox")
-driver = webdriver.Remote("127.0.0.1:9515",options=options)
+driver = webdriver.Remote("127.0.0.1:9515", options=options)
 
 logging.info("open twitcasting page")
 driver.get(twitcasting_url)
