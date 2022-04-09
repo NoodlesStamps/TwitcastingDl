@@ -6,7 +6,7 @@ on:
       url:
         required: true
         description: Twitcasting Video Url
-        
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,5 +14,5 @@ jobs:
     steps:
       - name: Run Docker Test
         run: |
-          docker run -e TWITCASTING_URL=${{github.event.inputs.url}} ${{ secrets.SECRET_TOKEN }}:latest
+          docker run -e TWITCASTING_URL=${{github.event.inputs.url}} ${{ secrets.DOCKER_HUB_USERNAME }}:latest
 
