@@ -33,7 +33,9 @@ user_id = match.group(1)
 video_id = match.group(2)
 
 logging.info("start webdriver")
-driver = webdriver.Remote("127.0.0.1:9515")
+options = webdriver.EdgeOptions()
+options.add_argument("--no-sandbox")
+driver = webdriver.Remote("127.0.0.1:9515",options=options)
 
 logging.info("open twitcasting page")
 driver.get(twitcasting_url)

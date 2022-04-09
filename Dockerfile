@@ -28,4 +28,6 @@ RUN mkdir /root/build &&\
     rm -rf /var/lib/apt/lists/* &&\
     rm -rf /root/build
 
-ENTRYPOINT [ "docker-entrypoint.sh" ]
+ENTRYPOINT [ "tail","-f","/dev/null" ]
+
+#ENTRYPOINT [ "docker-entrypoint.sh" ]
