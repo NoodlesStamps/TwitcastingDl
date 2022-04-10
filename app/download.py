@@ -35,6 +35,7 @@ video_id = match.group(2)
 logging.info("start webdriver")
 options = webdriver.EdgeOptions()
 options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
 driver = webdriver.Remote("127.0.0.1:9515", options=options)
 
 logging.info("open twitcasting page")
