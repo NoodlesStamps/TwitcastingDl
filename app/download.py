@@ -148,8 +148,11 @@ class TwitcastingDl:
                 url_data.netloc+content.split()[-1]
             output = "%s_%s_%s" % (self.user_id, self.video_id, code)
             logging.info("[%s]start download video stream" % code)
-            subprocess.run(['minyami', '-d', '%s' % media_url, '--output', '%s.ts' % output, '--headers', 'Referer: https://twitcasting.tv/',
-                            '--headers', 'User-Agent: %s' % self.ua, '--threads 3'], capture_output=True, check=True)
+            download_process = subprocess.Popen(['minyami', '-d', '%s' % media_url, '--output', '%s.ts' % output, '--headers', 'Referer: https://twitcasting.tv/',
+                            '--headers', 'User-Agent: %s' % self.ua, '--threads 3'], stdout=subprocess.PIPE)
+            while download_process.poll() is None:
+                buffer = download_process.stdout.read(200)
+                print(buffer.decode('utf8'))
             logging.info("[%s]download success" % code)
             logging.info("[%s]start fix video stream" % code)
             subprocess.run(['mkvmerge', '--output', '%s.mkv' % output, '--language', '0:und', '--fix-bitstream-timing-information', '0:1',
