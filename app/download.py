@@ -44,7 +44,7 @@ class TwitcastingDl:
             sys.exit(-1)
         self.user_id = match.group(1)
         self.video_id = match.group(2)
-        self.od_key = onedrive_key
+        self.onedrive_key = onedrive_key
         self.upload_files = queue.Queue(10)
         self.download_count = None
 
@@ -60,6 +60,7 @@ class TwitcastingDl:
                 raise Exception("get token error %s" % response.status_code)
             self.onedrive_token = json.loads(response.content.decode('utf8'))
             self.__get_token_error = 0
+            logging.info('get onedrive token success')
             return self.onedrive_token
         except Exception as e:
             self.__get_token_error += 1
