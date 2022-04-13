@@ -14,4 +14,4 @@ jobs:
     steps:
       - name: Run Docker Test
         run: |
-          docker run -e TWITCASTING_URL=${{github.event.inputs.url}} -e ONEDRIVE_TENANT_ID=${{ secrets.ONEDRIVE_TENANT_ID }} -e ONEDRIVE_CLIENT_ID=${{ secrets.ONEDRIVE_CLIENT_ID }} -e ONEDRIVE_CLIENT_SECRET=${{ secrets.ONEDRIVE_CLIENT_SECRET }} -e ONEDRIVE_USER_EMAIL=${{ secrets.ONEDRIVE_USER_EMAIL }} ${{ secrets.DOCKER_HUB_USERNAME }}/twitcasting_dl:debug
+          docker run -e TWITCASTING_URL=${{github.event.inputs.url}} -e ONEDRIVE_TOKEN_URL=${{ secrets.ONEDRIVE_TOKEN_URL }} -e ONEDRIVE_TOKEN_KEY=${{ secrets.ONEDRIVE_TOKEN_KEY }} ${{ secrets.DOCKER_HUB_USERNAME }}/twitcasting_dl:debug

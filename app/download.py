@@ -31,7 +31,7 @@ class TwitcastingDl:
     onedrive_token = None
     __get_token_error = 0
 
-    def __init__(self, twitcasting_url, onedrive_key):
+    def __init__(self, twitcasting_url, onedrive_token_url, onedrive_token_key):
         self.twitcasting_url = twitcasting_url
         if self.twitcasting_url is None:
             logging.error("no twitcasting url")
@@ -44,7 +44,8 @@ class TwitcastingDl:
             sys.exit(-1)
         self.user_id = match.group(1)
         self.video_id = match.group(2)
-        self.onedrive_key = onedrive_key
+        self.onedrive_token_key = onedrive_token_key
+        self.onedrive_token_url = onedrive_token_url
         self.upload_files = queue.Queue(10)
         self.download_count = None
 
@@ -53,8 +54,8 @@ class TwitcastingDl:
             return self.onedrive_token
         try:
             logging.info('onedrive token expired')
-            response = requests.post('https://ot.imea.me/token', data={
-                'key': self.onedrive_key
+            response = requests.post(self.onedrive_token_url, data={
+                'key': self.onedrive_token_key
             })
             if response.status_code != 200:
                 raise Exception("get token error %s" % response.status_code)
@@ -215,5 +216,5 @@ class TwitcastingDl:
 
 if __name__ == "__main__":
     tc = TwitcastingDl(
-        os.getenv("TWITCASTING_URL"), os.getenv("ONEDRIVE_KEY"))
+        os.getenv("TWITCASTING_URL"), os.getenv("onedrive_token_key"))
     tc.run()
