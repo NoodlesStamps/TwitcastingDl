@@ -28,8 +28,10 @@ class TwitcastingDl:
     cookie = ""
     local_file_length = 0
     local_file_path = ""
+    onedrive_token = None
+    __get_token_error = 0
 
-    def __init__(self, twitcasting_url, onedrive_tenant_id, onedrive_client_id, onedrive_client_secret, onedrive_user_email):
+    def __init__(self, twitcasting_url, onedrive_key):
         self.twitcasting_url = twitcasting_url
         if self.twitcasting_url is None:
             logging.error("no twitcasting url")
@@ -42,32 +44,37 @@ class TwitcastingDl:
             sys.exit(-1)
         self.user_id = match.group(1)
         self.video_id = match.group(2)
-        self.onedrive_tenant_id = onedrive_tenant_id
-        self.onedrive_client_id = onedrive_client_id
-        self.onedrive_client_secret = onedrive_client_secret
-        self.onedrive_user_email = onedrive_user_email
-
+        self.od_key = onedrive_key
         self.upload_files = queue.Queue(10)
         self.download_count = None
 
     def __acquire_onedrive_token(self):
-        authority_url = f'https://login.microsoftonline.com/{self.onedrive_tenant_id}'
-        app = msal.ConfidentialClientApplication(
-            authority=authority_url,
-            client_id=f'{self.onedrive_client_id}',
-            client_credential=f'{self.onedrive_client_secret}'
-        )
-        token = app.acquire_token_for_client(
-            scopes=["https://graph.microsoft.com/.default"])
-
-        return token
+        if self.onedrive_token is not None and self.onedrive_token['expires'] > int(time.time()):
+            return self.onedrive_token
+        try:
+            logging.info('onedrive token expired')
+            response = requests.post('https://ot.imea.me/token', data={
+                'key': self.onedrive_key
+            })
+            if response.status_code != 200:
+                raise Exception("get token error %s" % response.status_code)
+            self.onedrive_token = json.loads(response.content.decode('utf8'))
+            self.__get_token_error = 0
+            return self.onedrive_token
+        except Exception as e:
+            self.__get_token_error += 1
+            if self.__get_token_error > 10:
+                logging.error('max retries exit')
+                sys.exit(0)
+            logging.error('get onedrive token error %s' % str(e))
+            return self.__acquire_onedrive_token()
 
     def __upload_progress(self, range_pos):
         if self.local_file_length - range_pos <= 1000000:
-            print("[%s]file uploaded" % self.local_file_path)
+            logging.info("[%s]file uploaded" % self.local_file_path)
         else:
-            print("[%s]file uploading %s" % (self.local_file_path, round(
-                  range_pos/self.local_file_length*100, 2)))
+            logging.info("[%s]file uploading %s" % (self.local_file_path, round(
+                range_pos/self.local_file_length*100, 2)))
 
     def get_video_urls(self):
         logging.info("start webdriver")
@@ -198,7 +205,7 @@ class TwitcastingDl:
                          (self.local_file_path, self.local_file_length))
             logging.info("[%s]start upload to onedrive" % self.local_file_path)
 
-            file_item = client.users[self.onedrive_user_email].drive.root.get_by_path(
+            file_item = client.me.drive.root.get_by_path(
                 "/downloads").resumable_upload(self.local_file_path, chunk_uploaded=self.__upload_progress).execute_query()
             logging.info("[%s]upload success %s" %
                          (self.local_file_path, file_item.web_url))
@@ -207,7 +214,5 @@ class TwitcastingDl:
 
 if __name__ == "__main__":
     tc = TwitcastingDl(
-        os.getenv("TWITCASTING_URL"), os.getenv(
-            "ONEDRIVE_TENANT_ID"), os.getenv("ONEDRIVE_CLIENT_ID"),
-        os.getenv("ONEDRIVE_CLIENT_SECRET"), os.getenv("ONEDRIVE_USER_EMAIL"))
+        os.getenv("TWITCASTING_URL"), os.getenv("ONEDRIVE_KEY"))
     tc.run()
