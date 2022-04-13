@@ -128,16 +128,16 @@ class TwitcastingDl:
         output = "%s_%s_%s" % (self.user_id, self.video_id, code)
         logging.info("[%s]start download video stream" % code)
         subprocess.run(['minyami', '-d', '%s' % media_url, '--output', '%s.ts' % output, '--headers', 'Referer: https://twitcasting.tv/',
-                       '--headers', 'User-Agent: %s' % self.ua, '--threads 3'], capture_output=True, check=True)
+                       '--headers', 'User-Agent: %s' % self.ua, '--threads 3'], capture_output=False, check=True)
         logging.info("[%s]download success" % code)
         logging.info("[%s]start fix video stream" % code)
         subprocess.run(['mkvmerge', '--output', '%s.mkv' % output, '--language', '0:und', '--fix-bitstream-timing-information', '0:1',
-                       '--language', '1:und', '%s.ts' % output, '--track-order', '0:0,0:1'], capture_output=True, check=True)
+                       '--language', '1:und', '%s.ts' % output, '--track-order', '0:0,0:1'], capture_output=False, check=True)
         logging.info("[%s]fix success" % code)
         os.remove('%s.ts' % output)
         logging.info("[%s]format video to mp4" % code)
         subprocess.run(['ffmpeg', '-i', '%s.mkv' % output, '-c:v', 'copy', '-c:a',
-                       'copy', 'output/%s.mp4' % output], capture_output=True, check=True)
+                       'copy', 'output/%s.mp4' % output], capture_output=False, check=True)
         logging.info("[%s]format success" % code)
         os.remove('%s.mkv' % output)
         filepath = "output/%s.mp4" % output
