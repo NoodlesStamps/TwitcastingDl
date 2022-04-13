@@ -15,8 +15,3 @@ jobs:
       - name: Run Docker Test
         run: |
           docker run -e TWITCASTING_URL=${{github.event.inputs.url}} ${{ secrets.DOCKER_HUB_USERNAME }}/twitcasting_dl:debug
-
-      - name: Read Log
-        run: |
-          cat /root/app/Xvfb.log
-          cat /root/app/msedgedriver.log
